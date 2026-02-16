@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертер RUB → USD/AED/GEL</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; margin-bottom: 30px; color: #333; font-size: 24px; }
+        
+        .input-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
+        input { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 8px; font-size: 18px; }
+        input:focus { outline: none; border-color: #007bff; }
+        
+        .rates { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+        .rate-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .rate-item:last-child { margin-bottom: 0; }
+        .rate-label { font-weight: 600; color: #555; min-width: 120px; }
+        
+        .results { background: #e7f3ff; padding: 25px; border-radius: 8px; }
+        .result-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #d0e3ff; font-size: 18px; }
+        .result-item:last-child { border-bottom: none; }
+        .result-label { font-weight: 700; color: #007bff; }
+        .result-value { font-weight: 700; color: #28a745; }
+        
+        .btn-calculate { width: 100%; padding: 14px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; margin-top: 20px; }
+        .btn-calculate:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Конвертер RUB → USD/AED/GEL</h1>
+        
+        <div class="input-group">
+            <label for="rubAmount">Сумма в рублях (RUB):</label>
+            <input type="number" id="rubAmount" value="1000" min="0" step="1" placeholder="Введите сумму в рублях">
+        </div>
+        
+        <div class="rates">
+            <label>Курсы обмена:</label>
+            <div class="rate-item">
+                <span class="rate-label">1 USD =</span>
+                <input type="number" id="rubToUsd" value="78" step="0.01" min="0">
+                <span>RUB</span>
+            </div>
+            <div class="rate-item">
+                <span class="rate-label">1 USD =</span>
+                <input type="number" id="usdToAed" value="3.67" step="0.01" min="0">
+                <span>AED (Дирхам)</span>
+            </div>
+            <div class="rate-item">
+                <span class="rate-label">1 USD =</span>
+                <input type="number" id="usdToGel" value="2.68" step="0.01" min="0">
+                <span>GEL (Лари)</span>
+            </div>
+        </div>
+        
+        <button class="btn-calculate" onclick="calculate()">Рассчитать</button>
+        
+        <div class="results">
+            <div class="result-item">
+                <span class="result-label">USD:</span>
+                <span class="result-value" id="resultUsd">0.00</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">AED (Дирхам):</span>
+                <span class="result-value" id="resultAed">0.00</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">GEL (Лари):</span>
+                <span class="result-value" id="resultGel">0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const rubAmount = parseFloat(document.getElementById('rubAmount').value);
+            const rubToUsd = parseFloat(document.getElementById('rubToUsd').value);
+            const usdToAed = parseFloat(document.getElementById('usdToAed').value);
+            const usdToGel = parseFloat(document.getElementById('usdToGel').value);
+            
+            if (isNaN(rubAmount) || rubAmount <= 0) {
+                alert('Введите корректную сумму в рублях');
+                return;
+            }
+            
+            // Конвертация
+            const usd = rubAmount / rubToUsd;
+            const aed = usd * usdToAed;
+            const gel = usd * usdToGel;
+            
+            // Вывод результатов
+            document.getElementById('resultUsd').textContent = usd.toFixed(2) + ' USD';
+            document.getElementById('resultAed').textContent = aed.toFixed(2) + ' AED';
+            document.getElementById('resultGel').textContent = gel.toFixed(2) + ' GEL';
+        }
+        
+        // Авто-расчёт при изменении
+        document.getElementById('rubAmount').addEventListener('input', calculate);
+        document.getElementById('rubToUsd').addEventListener('input', calculate);
+        document.getElementById('usdToAed').addEventListener('input', calculate);
+        document.getElementById('usdToGel').addEventListener('input', calculate);
+        
+        // Инициализация
+        calculate();
+    </script>
+</body>
+</html>
